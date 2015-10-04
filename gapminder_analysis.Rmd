@@ -51,11 +51,25 @@ ctrydata<-mutate(ctrydata,gdp=pop*gdpPercap)
 
 ## Plots of GDP versus time
 
+Notably, Mexico has a larger GDP than Canada, and Chile's GDP was badly hurt by the Pinochet years.
+
 ```{r, echo=FALSE}
 make_plot(ctrydata,"Canada")  
 make_plot(ctrydata,"Mexico")  
 make_plot(ctrydata,"Chile")  
 ```
 
-Notably, Mexico has a larger GDP than Canada, and Chile's GDP was badly hurt by the Pinochet years.
+## Life Expectancies
 
+```{r life-expectancies, echo=FALSE}
+# min mean max for each continent
+
+gap.in %>% 
+  select(lifeExp,country,continent,year) %>%
+  filter(year == 2007) %>%
+  group_by(continent) %>%
+  summarise(minPop = min(lifeExp), meanPop = mean(lifeExp), maxPop = max(lifeExp))
+
+```
+
+African life expectancies are the shortest in the world, for the simple analysis performed here. Africa has the shortest life expectancy of any continent checked, and has the shortest mean. 
