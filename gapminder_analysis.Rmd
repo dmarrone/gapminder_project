@@ -1,0 +1,61 @@
+---
+title: "Gapminder analysis"
+author: "Dan Marrone"
+date: "10/4/2015"
+output: html_document
+---
+
+This document will analyze some of the gapminder data. 
+
+```{r, echo=FALSE}
+#install.packages("dplyr")
+library("dplyr")
+```
+
+```{r read-in-data, echo=FALSE}
+gap.in<-read.table("output/combined_gapMinder.tsv", sep = "\t", header = TRUE)
+#summary(gap.in)
+
+gap.in %>% 
+  select(pop,country,continent,year) %>%
+  filter(year == 2007) %>%
+  group_by(continent) %>%
+  summarise(median = median(pop))
+```
+
+```{r plotting-fcn, echo=FALSE}
+
+make_plot <- function(data,selctry) {
+  subdata <- filter(data, country == selctry) 
+  plot(x = subdata$year, 
+       y = subdata$gdp/1e12, 
+       main = paste0(selctry,": GDP evolution"), 
+       xlab = "Year", 
+       ylab = "GDP (T$)", 
+       pch = 20, tck = 0.01)
+#       cex = 5*(subdata[,3]/max(subdata[,3])))
+  axis(4, tick = TRUE, labels = FALSE, tck = 0.01)
+  axis(3, tick = TRUE, labels = FALSE, tck = 0.01)
+#  dev.off()
+}
+
+gap.in %>% 
+  select(country,year,pop,gdpPercap) %>%
+  filter(country == "Canada"| country == "Mexico"| country == "Chile") %>%
+  group_by(country) -> ctrydata
+ctrydata<-mutate(ctrydata,gdp=pop*gdpPercap)
+
+#ctrydataCA<-filter(ctrydata, country == "Canada") 
+
+```
+
+## Plots of GDP versus time
+
+```{r, echo=FALSE}
+make_plot(ctrydata,"Canada")  
+make_plot(ctrydata,"Mexico")  
+make_plot(ctrydata,"Chile")  
+```
+
+Notably, Mexico has a larger GDP than Canada, and Chile's GDP was badly hurt by the Pinochet years.
+
