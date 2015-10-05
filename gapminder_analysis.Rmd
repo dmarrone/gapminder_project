@@ -72,4 +72,22 @@ gap.in %>%
 
 ```
 
-African life expectancies are the shortest in the world, for the simple analysis performed here. Africa has the shortest life expectancy of any continent checked, and has the shortest mean. 
+African life expectancies are the shortest in the world, for the simple analysis performed here. Africa has the shortest life expectancy (by continent), the shortest mean, and the lowest maximum. In Europe there is a very small range of life expectancies, and in Oceania the range is even smaller. 
+
+
+```{r life-expectancies-plot, echo=FALSE}
+gap.in %>% 
+  filter(year == 2007) -> lastdata
+hist(lastdata$lifeExp,
+     xlab = "Years",
+     ylab = "Number of Countries",
+     main = "Life Expectancy Distribution")
+
+hist(lastdata$lifeExp, breaks = c(35:85),
+     xlab = "Years",
+     ylab = "Number of Countries",
+     main = "Life Expectancy Distribution")
+
+```
+
+The histogram shows that there seem to be two groups of life expectancy - a narrow group at the high end and a wide tail of low expectancy. 
